@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Probleme Programare - Ivanov Nichita</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ── Nav bar ── */
+        .top-nav {
+            background: var(--gray-dark);
+            border-bottom: 2px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            margin: 0 auto;
+            max-width: 1100px;
+            padding: 0 2rem;
+        }
+        .top-nav ul li a {
+            display: block;
+            padding: 1rem 1.4rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .top-nav ul li a:hover,
+        .top-nav ul li a.active {
+            color: var(--beige-rose);
+            border-bottom-color: var(--beige-rose);
+        }
+
+        /* ── Page header ── */
+        .page-hero {
+            background: linear-gradient(135deg, var(--gray-dark) 0%, #3d3f41 100%);
+            padding: 3rem;
+            border-bottom: 2px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 300px; height: 300px;
+            background: radial-gradient(circle, rgba(232,209,197,0.1) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .page-hero h1 {
+            font-size: 2.6rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--beige-rose), var(--cream));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.4rem;
+        }
+        .page-hero .subtitle {
+            color: var(--beige-rose);
+            font-size: 1.1rem;
+            font-weight: 500;
+            margin-bottom: 1.8rem;
+        }
+        .breadcrumb {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+        .breadcrumb a { color: var(--beige-rose); text-decoration: none; }
+        .breadcrumb a:hover { text-decoration: underline; }
+
+        /* ── Stats bar ── */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            padding: 1.5rem 3rem;
+            background: rgba(87,89,91,0.3);
+            border-bottom: 1px solid var(--border-color);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-num {
+            display: block;
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--beige-rose);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 0.3rem;
+            display: block;
+        }
+
+        /* ── Main content ── */
+        .problems-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem 3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* ── Problem card ── */
+        .problem-card {
+            background: rgba(87,89,91,0.4);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .problem-card:hover {
+            border-color: var(--beige-rose);
+            box-shadow: 0 4px 20px rgba(232,209,197,0.1);
+        }
+        .problem-card.expanded {
+            border-color: var(--beige-rose);
+        }
+
+        /* card header (always visible) */
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            padding: 1.4rem 1.8rem;
+            cursor: pointer;
+            user-select: none;
+        }
+        .card-header:hover { background: rgba(232,209,197,0.06); }
+
+        .badge {
+            background: linear-gradient(135deg, var(--beige-rose), #d4b8a8);
+            color: var(--brown-dark);
+            padding: 0.4rem 0.9rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 800;
+            white-space: nowrap;
+            min-width: 70px;
+            text-align: center;
+        }
+        .badge.poo {
+            background: linear-gradient(135deg, #8a9f7a, #6d8060);
+            color: #fff;
+        }
+
+        .card-title-wrap {
+            flex: 1;
+        }
+        .card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+        .card-meta {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+        }
+
+        .lang-pill {
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.3rem 0.7rem;
+            border-radius: 3px;
+            border: 1px solid;
+            white-space: nowrap;
+        }
+        .lang-cpp { color: #79b8ff; border-color: rgba(121,184,255,0.4); background: rgba(121,184,255,0.1); }
+        .lang-python { color: #79c0ff; border-color: rgba(121,192,255,0.4); background: rgba(121,192,255,0.1); }
+        .lang-csharp { color: #c3a6e0; border-color: rgba(195,166,224,0.4); background: rgba(195,166,224,0.1); }
+
+        .toggle-icon {
+            color: var(--text-muted);
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+            font-weight: 300;
+        }
+        .problem-card.expanded .toggle-icon { transform: rotate(45deg); }
+
+        /* card body (collapsible) */
+        .card-body {
+            display: none;
+            border-top: 1px solid var(--border-color);
+            padding: 1.8rem;
+            gap: 1.5rem;
+            flex-direction: column;
+        }
+        .problem-card.expanded .card-body { display: flex; }
+
+        .card-link-row {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .label-small {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        .btn-onlinegdb {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: linear-gradient(135deg, var(--beige-rose), #d4b8a8);
+            color: var(--brown-dark);
+            padding: 0.6rem 1.3rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        .btn-onlinegdb:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(232,209,197,0.35);
+        }
+
+        .card-description {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        /* ── Footer ── */
+        .page-footer {
+            padding: 2rem 3rem;
+            border-top: 1px solid var(--border-color);
+            background: rgba(87,89,91,0.3);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+        .page-footer a {
+            color: var(--beige-rose);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.8rem 1.6rem;
+            border: 2px solid var(--beige-rose);
+            border-radius: 4px;
+        }
+        .page-footer a:hover {
+            background: var(--beige-rose);
+            color: var(--brown-dark);
+        }
+        .page-footer p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* ── Responsive ── */
+        @media (max-width: 700px) {
+            .page-hero, .stats-bar { padding: 1.8rem 1.5rem; }
+            .page-hero h1 { font-size: 1.9rem; }
+            .problems-wrapper { padding: 1.5rem; }
+            .card-header { padding: 1.2rem; gap: 0.8rem; }
+            .card-body { padding: 1.2rem; }
+            .top-nav ul { padding: 0; }
+            .top-nav ul li a { padding: 0.9rem 0.9rem; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-container">
+
+        <!-- Navigation -->
+        <nav class="top-nav">
+            <ul>
+                <li><a href="index.html">CV-ul meu</a></li>
+                <li><a href="portfolio.html">Portofoliu</a></li>
+                <li><a href="probleme.html" class="active">Probleme Programare</a></li>
+                <li><a href="declaratie.html">Declarație</a></li>
+            </ul>
+        </nav>
+
+        <!-- Hero -->
+        <header class="page-hero">
+            <h1>Probleme Programare</h1>
+            <p class="subtitle">Lucrări practice · C#,  &amp; POO</p>
+            <div class="breadcrumb">
+                <a href="index.html">Acasă</a> / Probleme Programare
+            </div>
+        </header>
+
+        <!-- Stats -->
+        <div class="stats-bar">
+            <div class="stat-item">
+                <span class="stat-num">10</span>
+                <span class="stat-label">Sarcini totale</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">C#</span>
+                <span class="stat-label">Limbaj principal</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">POO</span>
+                <span class="stat-label">Programare OOP</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-num">OnlineGDB</span>
+                <span class="stat-label">Platformă demo</span>
+            </div>
+        </div>
+
+        <!-- Problems list -->
+        <main class="problems-wrapper">
+
+            <!-- m1.7 -->
+            <div class="problem-card" id="m1-7">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge">M1.7</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina M1.7</div>
+                        <div class="card-meta">Modul 1 · Sarcina 7</div>
+                    </div>
+                    <span class="lang-pill lang-cpp">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/MnifuoCinD" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">M1. 7 În notația (a)x litera x reprezintă baza sistemului de numerație, iar litera a - un număr scris în
+sistemul respectiv. Elaborați un program care calculează, dacă există, cel puțin o rădăcină a ecuației (a)x
+= b, unde a și b sunt numere naturale, iar x este necunoscuta. Fiecare cifră a numărului natural a aparține
+mulțimii {0, 1,2, ..., 9}, iar numărul b este scris în sistemul zecimal.
+Exemplu: rădăcina ecuației (160)x = 122 este x=8, iar ecuația (5)x=10 nu are soluții. Estimați
+complexitatea temporală a programului elaborat.</p>
+                </div>
+            </div>
+
+            <!-- m2.17 -->
+            <div class="problem-card" id="m2-17">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge">M2.17</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina M2.17</div>
+                        <div class="card-meta">Modul 2 · Sarcina 17</div>
+                    </div>
+                    <span class="lang-pill lang-cpp">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/UUgZOiud2" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">Hrubele de la Cricova. După o vizită la renumitele hrube de la Cricova un informatician a
+construit un robot care funcționează într-un câmp divizat în pătrățele (fig. 1). Robotul poate executa
+doar instrucțiunile SUS, JOS, DREAPTA, STÂNGA, conform cărora se deplasează în unul din
+pătrățelele vecine. Dacă în acest pătrat este un obstacol, de exemplu, un perete sau un butoi, are loc un
+accident și robotul iese din funcțiune.
+
+Elaborați un program care, cunoscând planul hrubelor, deplasează robotul prin încăperile subterane, de
+la intrarea în hrube la ieșire. Colecția de vinuri fiind foarte bogată, nu se cere vizitarea obligatorie a
+tuturor încăperilor subterane.
+Datele de intrare: Planul hrubelor este desenat pe o foaie de hârtie liniată în pătrățele. Pătrățelele
+hașurate reprezintă obstacolele, iar cele nehașurate - spațiile libere. Pătrățelele de pe perimetrul
+planului, cu excepția celor de intrare sau ieșire, sunt hașurate prin definiție. În formă numerică planul
+hrubelor este redat prin tabloul A cu m linii și n coloane. Elementele A[i,j] ale acestui tablou au
+următoarea semnificație: 0 - spațiu liber; 1 - obstacol; 2 - intrarea în hrube; 3 - ieșirea din hrube. Inițial,
+robotul se află în pătrățelul pentru care A[i,j]=2. Fișierul date.in conține pe prima linie numerele m, n
+separate prin spațiu. Pe următoarele m linii se conțin câte n numere A[i,j] separate prin spațiu.
+Datele de ieșire: Fișierul date.out va conține pe fiecare linie câte una din instrucțiunile SUS, JOS,
+DREAPTA, STÂNGA scrise în ordinea executării lor de către robot.
+Restricții: 5 ≤ m, n ≤ 100. Timpul de execuție nu va depăși 3 secunde.</p>
+                </div>
+            </div>
+
+            <!-- m3.17 -->
+            <div class="problem-card" id="m3-17">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge">M3.17</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina M3.17</div>
+                        <div class="card-meta">Modul 3 · Sarcina 17</div>
+                    </div>
+                    <span class="lang-pill lang-cpp">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/UAtruSujh" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">Să se determine 5 numere de câte n cifre, fiecare cifră putând fi 1 sau 2, astfel încât oricare
+dintre aceste 5 numere să coincidă exact în m poziții și să nu existe o poziție în care să apară aceeași
+cifră în toate cele 5 numere.</p>
+                </div>
+            </div>
+
+            <!-- m3.35 -->
+            <div class="problem-card" id="m3-35">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge">M3.35</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina M3.35</div>
+                        <div class="card-meta">Modul 3 · Sarcina 35</div>
+                    </div>
+                    <span class="lang-pill lang-cpp">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/-fayAr1vQ" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">Se citește un număr natural n. Să se afișeze toate modurile în care poate fi descompus ca produs
+de numere naturale diferite de 1 și n.</p>
+                </div>
+            </div>
+
+            <!-- m4.6 -->
+            <div class="problem-card" id="m4-6">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge">M4.6</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina M4.6</div>
+                        <div class="card-meta">Modul 4 · Sarcina 6</div>
+                    </div>
+                    <span class="lang-pill lang-cpp">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/SSYiPcoPa" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">Generarea aranjamentelor. Să se genereze aranjamentele din n luate câte k a mulțimii
+A={1,2,... n}.</p>
+                </div>
+            </div>
+
+            <!-- m5.9 -->
+            <div class="problem-card" id="m5-9">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge">M5.9</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina M5.9</div>
+                        <div class="card-meta">Modul 5 · Sarcina 9</div>
+                    </div>
+                    <span class="lang-pill lang-cpp">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/FSXAzipUz" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">Într-o placă dreptunghiulară cu dimensiunile N pe L (coordonatele dreptunghiului) sunt făcute
+K găuri. Coordonatele găurilor sunt numere întregi. Fișierul date.in conține în prima linie numărul n,
+care reprezintă numărul de găuri, pe liniile următoare se regăsesc coordonatele găurilor. Scrieți un
+program, care determină cel mai mic dreptunghi (cu o suprafață mai mare ca 0) fără găuri din placă.</p>
+                </div>
+            </div>
+
+            <!-- m6.10 -->
+            <div class="problem-card" id="m6-10">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge">M6.10</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina M6.10</div>
+                        <div class="card-meta">Modul 6 · Sarcina 10</div>
+                    </div>
+                    <span class="lang-pill lang-cpp">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/UT5GXJP50" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">În fișierul date.in se află pe prima linie un număr natural n cel mult 20 000, iar pe liniile
+următoare o matrice pătratică de dimensiune n care conține doar elemente 0 și 1.
+Să se determine cel mai mare pătrat care conține doar valori 1. Se vor afișa în fișierul text date.out
+următoarele valori separate prin spațiu: latura pătratului, linia și coloana colțului stânga sus al
+pătratului. Dacă exista mai multe astfel de pătrate se va afișa doar cel mai de sus.</p>
+                </div>
+            </div>
+
+            <!-- m6.17 -->
+            <div class="problem-card" id="m6-17">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge">M6.17</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina M6.17</div>
+                        <div class="card-meta">Modul 6 · Sarcina 17</div>
+                    </div>
+                    <span class="lang-pill lang-cpp">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/sIREkDfvb" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">Clădirea Finanțelor publice este formată din birouri dispuse într-un dreptunghi cu n x m
+elemente. Între două birouri se poate trece dacă sunt alăturate pe linie sau pe coloană.
+Pentru fiecare birou se cunoaște valoarea taxei care trebuie plătită în acel birou (valoare naturală). Un
+contribuabil intră în clădire prin biroul 1,1 și trebuie să o părăsească prin biroul n, m. Calculați suma
+minimă a taxelor pe care le poate plăti contribuabilul de la intrare până la ieșirea din clădire.</p>
+                </div>
+            </div>
+
+            <!-- poo 3 -->
+            <div class="problem-card" id="poo-3">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge poo">POO 3</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina POO 3</div>
+                        <div class="card-meta">Programare Orientată pe Obiecte · Sarcina 3</div>
+                    </div>
+                    <span class="lang-pill lang-python">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/870ktMriO" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">3. Gestiune CD din biblioteca personala
+Se se dezvolte o aplicatie care tine evidenta cd-urilor unei persoane si tipareste tabele cu cdurile care satisfac
+anumite conditii sortate dupa diferite criterii. Informatiile care se cunosc despre un cd sunt:
+1. identificator cd
+2. nume cd
+3. dimensiune cd (MB)
+4. viteza maxima de inscriptionare
+
+5. spatiu ocupat
+6. numarul de sesiuni
+7. tipul sesiunii
+Aplicatia trebuie sa permita urmatoarele operatii:
+1. introducere date;
+2. afisare cd-uri sortate dupa nume;
+3. adaugare a unui nou cd;
+4. cautare cd dupa identificator cd;
+5. afisare cd-urilor care au spatiu liber mai mare decat o valoare data;
+6. ordonare cd-uri dupa dimensiune CD(MB);
+7. afisare cd-urilor ce au sesiuni deschise;
+8. clasarea cd-urilor dupa viteza de inscriptionare;
+9. clasarea cd-urilor dupa tip cd.</p>
+                </div>
+            </div>
+
+            <!-- poo 14 -->
+            <div class="problem-card" id="poo-14">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge poo">POO 14</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina POO 14</div>
+                        <div class="card-meta">Programare Orientată pe Obiecte · Sarcina 14</div>
+                    </div>
+                    <span class="lang-pill lang-python">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/tnUcbkkmC" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">14. Evidenta furnizori societate comerciala
+Despre un fumizor al unei societati comerciale se cunosc urmatoarele informatii: denumire furnizor; cod
+fiscal; lista produselor oferite de acel furnizor; adresa furnizorului; persoana de contact; telefon;
+Operatii cerute:
+1. actualizare lista furnizorii;
+2. adaugarea unui nou furnizor;
+3. stergere furnizor dupa denumire;
+4. cautare furnizor dupa cod fiscal;
+5. adaugare produs sau produse oferite de un anumit furnizor;
+6. stergere produs sau produse oferite de un anumit furnizor;
+7. sortare furnizori dupa denumire;</p>
+                </div>
+            </div>
+
+            <!--Sarcina suplimentara-->
+                        <div class="problem-card" id="Sarcina suplimentară">
+                <div class="card-header" onclick="toggleCard(this)">
+                    <span class="badge poo">Sarcina suplimentară</span>
+                    <div class="card-title-wrap">
+                        <div class="card-title">Sarcina suplimentară</div>
+                        <div class="card-meta">Programare Orientată pe Obiecte · Sarcina suplimentară</div>
+                    </div>
+                    <span class="lang-pill lang-python">C#</span>
+                    <span class="toggle-icon">+</span>
+                </div>
+                <div class="card-body">
+                    <div class="card-link-row">
+                        <span class="label-small">Link online:</span>
+                        <a href="https://onlinegdb.com/mhS2lc1I1" target="_blank" rel="noopener noreferrer" class="btn-onlinegdb">
+                            ▶ Deschide în OnlineGDB
+                        </a>
+                    </div>
+                    <p class="card-description">Sarcina suplimentară — implementare avansată cu moștenire, polimorfism și principii OOP aplicate în C#. Exemplu complex de design orientat pe obiecte.</p>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+            <a href="index.html">← Înapoi la CV</a>
+            <p>&copy; 2026 Ivanov Nichita.</p>
+        </footer>
+
+    </div>
+
+    <script>
+        function toggleCard(header) {
+            const card = header.closest('.problem-card');
+            const isOpen = card.classList.contains('expanded');
+            // Close all
+            document.querySelectorAll('.problem-card').forEach(c => c.classList.remove('expanded'));
+            // Toggle clicked
+            if (!isOpen) card.classList.add('expanded');
+        }
+    </script>
+</body>
+</html>

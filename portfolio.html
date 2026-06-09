@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portofoliu - Ivanov Nichita</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .top-nav {
+            background: var(--gray-dark);
+            border-bottom: 2px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            margin: 0 auto;
+            max-width: 1100px;
+            padding: 0 2rem;
+        }
+        .top-nav ul li a {
+            display: block;
+            padding: 1rem 1.4rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .top-nav ul li a:hover,
+        .top-nav ul li a.active {
+            color: var(--beige-rose);
+            border-bottom-color: var(--beige-rose);
+        }
+        @media (max-width: 600px) {
+            .top-nav ul { padding: 0; }
+            .top-nav ul li a { padding: 0.9rem 0.9rem; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-container">
+
+        <!-- Navigation -->
+        <nav class="top-nav">
+            <ul>
+                <li><a href="index.html">CV-ul meu</a></li>
+                <li><a href="portfolio.html" class="active">Portofoliu</a></li>
+                <li><a href="probleme.html">Probleme Programare</a></li>
+                <li><a href="declaratie.html">Declarație</a></li>
+            </ul>
+        </nav>
+        <!-- Header -->
+        <header class="cv-header">
+            <div class="header-content">
+                <h1>Portofoliul Meu</h1>
+                <p class="title-role">Prezentare de lucrări și realizări</p>
+            </div>
+        </header>
+
+        <div class="cv-main portfolio-layout">
+            <main class="cv-content">
+                <!-- Despre Portfolio -->
+                <section class="cv-section">
+                    <h2>Prezentare</h2>
+                    <p>Aceasta este colecția proiectelor și lucrărilor mele reprezentative din perioada de studiu și stagiu. Fiecare proiect demonstrează competențele mele în web development și design modern.</p>
+                </section>
+
+                <!-- Canva Presentation -->
+                <section class="cv-section">
+                    <h2>Prezentare Interactivă</h2>
+                    <div class="presentation-card">
+                        <div class="card-content">
+                            <h3>Prezentarea Excepțiilor în C#</h3>
+                            <p>Prezentare comprehensivă cu 14 slide-uri, exemple de cod și diagrame explicative. Prezentată în cadrul examenului oral.</p>
+                            <a href="https://canva.link/iv7k8qcplxzks9t" target="_blank" rel="noopener noreferrer" class="btn-open">
+                                Deschide Prezentarea →
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Documents Section -->
+                <section class="cv-section">
+                    <h2>Documente și Fișiere</h2>
+                    <p class="description">Fișiere reprezentative din activitatea de stagiu și studiu:</p>
+
+                    <div class="files-grid">
+                        <!-- File 1 -->
+                        <div class="file-card">
+                            <div class="file-header">
+                                <span class="file-icon">📋</span>
+                                <h3>Agenda Practică</h3>
+                            </div>
+                            <p class="file-desc">Plan detaliat al stagiului cu obiective și activități.</p>
+                            <a href="agendapractica.docx" download="agendapractica.docx" class="btn-download">
+                                Descarcă
+                            </a>
+                        </div>
+
+                        <!-- File 2 -->
+                        <div class="file-card">
+                            <div class="file-header">
+                                <span class="file-icon">📄</span>
+                                <h3>Raport Practică</h3>
+                            </div>
+                            <p class="file-desc">Raportul final al perioadei de stagiu cu rezultate și evaluare.</p>
+                            <a href="raport_practica.docx" download="raport_practica.docx" class="btn-download">
+                                Descarcă
+                            </a>
+                        </div>
+
+                        <!-- File 3 -->
+                        <div class="file-card">
+                            <div class="file-header">
+                                <span class="file-icon">💻</span>
+                                <h3>Probleme Programare</h3>
+                            </div>
+                            <p class="file-desc">Colecție de probleme rezolvate în C++ și Python cu linkuri.</p>
+                            <a href="probelmele.txt" download="probleme.txt" class="btn-download">
+                                Descarcă
+                            </a>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Cloud Storage -->
+                <section class="cv-section">
+                    <h2>Descărcări și Partajare</h2>
+                    <div class="info-box">
+                        <p><strong>Pentru descărcări complete:</strong> Fișierele pot fi descărcate direct de mai sus.</p>
+                        <p><strong>Pentru partajare externă:</strong> Poți încărca fișierele pe Google Drive sau Dropbox și partaja link-ul cu cei interesați.</p>
+                    </div>
+                </section>
+
+                <!-- Projects Preview -->
+                <section class="cv-section">
+                    <h2>Proiecte Tehnice</h2>
+                    
+                    <div class="project-preview">
+                        <h3>Portfolio Web Personal</h3>
+                        <p>Site CV și portofoliu creat cu <strong>HTML5</strong> și <strong>CSS3</strong> pur. Design dark modern cu focus pe accesibilitate, performanță și responsivitate pe toate dispozitivele. Fără framework-uri sau JavaScript - cod curat și optimizat.</p>
+                        <div class="tech-stack">
+                            <span class="tech">HTML5</span>
+                            <span class="tech">CSS3</span>
+                            <span class="tech">Design Responsiv</span>
+                            <span class="tech">SEO Optimized</span>
+                        </div>
+                    </div>
+
+                    <div class="project-preview">
+                        <h3>Probleme Algoritmice C++</h3>
+                        <p>Rezolvare și implementare a problemelor algoritmice complexe în <strong>C++</strong>. Fiecare problemă include explicații detaliate, cod comentat și analiza complexității. Probleme din diferite categorii: string processing, grafuri, dinamica.</p>
+                        <div class="tech-stack">
+                            <span class="tech">C++</span>
+                            <span class="tech">Algoritmi</span>
+                            <span class="tech">Structuri de Date</span>
+                            <span class="tech">Optimizare</span>
+                        </div>
+                    </div>
+
+                    <div class="project-preview">
+                        <h3>Proiecte Python</h3>
+                        <p>Aplicații și scripturi în <strong>Python</strong> cu focus pe automatizare și processing de date. Includ probleme curente din cursuri și exerciții practice de nivel intermediar-avansat.</p>
+                        <div class="tech-stack">
+                            <span class="tech">Python</span>
+                            <span class="tech">Scripts</span>
+                            <span class="tech">Data Processing</span>
+                            <span class="tech">OOP</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Skills Applied -->
+                <section class="cv-section">
+                    <h2>Competențe Demonstrate</h2>
+                    <div class="skills-grid">
+                        <div class="skill-group">
+                            <h4>Frontend Development</h4>
+                            <p>HTML5, CSS3, design responsiv, user experience, accessibility</p>
+                        </div>
+                        <div class="skill-group">
+                            <h4>Limbaje de Programare</h4>
+                            <p>C++, Python, C#, SQL</p>
+                        </div>
+                        <div class="skill-group">
+                            <h4>Soft Skills</h4>
+                            <p>Comunicare, work in team, problem-solving, timp de livrare</p>
+                        </div>
+                        <div class="skill-group">
+                            <h4>Tools & Platforms</h4>
+                            <p>Figma, Git, Online Compilers, VS Code</p>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <footer class="cv-footer">
+            <a href="index.html" class="footer-link">← Înapoi la CV</a>
+            <a href="probleme.html" class="footer-link">Probleme Programare →</a>
+            <p>&copy; 2026 Ivanov Nichita.</p>
+        </footer>
+    </div>
+</body>
+</html>

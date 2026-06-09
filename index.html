@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ivanov Nichita - CV</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .top-nav {
+            background: var(--gray-dark);
+            border-bottom: 2px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            margin: 0 auto;
+            max-width: 1100px;
+            padding: 0 2rem;
+        }
+        .top-nav ul li a {
+            display: block;
+            padding: 1rem 1.4rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .top-nav ul li a:hover,
+        .top-nav ul li a.active {
+            color: var(--beige-rose);
+            border-bottom-color: var(--beige-rose);
+        }
+        @media (max-width: 600px) {
+            .top-nav ul { padding: 0; }
+            .top-nav ul li a { padding: 0.9rem 0.9rem; font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cv-container">
+
+        <!-- Navigation -->
+        <nav class="top-nav">
+            <ul>
+                <li><a href="index.html" class="active">CV-ul meu</a></li>
+                <li><a href="portfolio.html">Portofoliu</a></li>
+                <li><a href="probleme.html">Probleme Programare</a></li>
+                <li><a href="declaratie.html">Declarație</a></li>
+            </ul>
+        </nav>
+        <!-- Header Section -->
+        <header class="cv-header">
+            <div class="header-content">
+                <h1>Ivanov Nichita</h1>
+                <p class="title-role">Student Web Developer</p>
+                <div class="header-info">
+                    <div class="info-item">
+                        <span class="label">Vârsta:</span>
+                        <span class="value">17 ani</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Locație:</span>
+                        <span class="value">Chișinău, Moldova</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Email:</span>
+                        <span class="value">inikita6077@gmail.com</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Telefon:</span>
+                        <span class="value">+373 69 999 258</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="cv-main">
+            <!-- Sidebar Left -->
+            <aside class="cv-sidebar">
+                <!-- Despre -->
+                <section class="cv-section">
+                    <h2>Despre</h2>
+                    <p>Student pasionat în web development cu accent pe crearea interfețelor moderne și funcționale. Mă concentrez pe learning continuu și aplicarea celor mai bune practici în front-end development.</p>
+                </section>
+
+                <!-- Competențe Tehnice -->
+                <section class="cv-section">
+                    <h2>Competențe Tehnice</h2>
+                    <div class="skills-list">
+                        <div class="skill-item">
+                            <span class="skill-category">Frontend:</span>
+                            <span class="skill-tags">
+                                <span class="tag">HTML5</span>
+                                <span class="tag">CSS3</span>
+                                <span class="tag">Responsive</span>
+                            </span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-category">Limbaje:</span>
+                            <span class="skill-tags">
+                                <span class="tag">Python</span>
+                                <span class="tag">C++</span>
+                                <span class="tag">C#</span>
+                            </span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-category">Baze date:</span>
+                            <span class="skill-tags">
+                                <span class="tag">SQL</span>
+                            </span>
+                        </div>
+                        <div class="skill-item">
+                            <span class="skill-category">Design:</span>
+                            <span class="skill-tags">
+                                <span class="tag">Figma</span>
+                            </span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Limbi Cunoscute -->
+                <section class="cv-section">
+                    <h2>Limbi Străine</h2>
+                    <div class="languages-list">
+                        <div class="language-item">
+                            <span class="lang-name">Limba Română</span>
+                            <span class="lang-level">Nativ</span>
+                        </div>
+                        <div class="language-item">
+                            <span class="lang-name">Engleză</span>
+                            <span class="lang-level">B1</span>
+                        </div>
+                        <div class="language-item">
+                            <span class="lang-name">Limba Rusă</span>
+                            <span class="lang-level">B2+</span>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="cv-content">
+                <!-- Educație -->
+                <section class="cv-section">
+                    <h2>Educație</h2>
+                    
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <h3>Curs Web Development</h3>
+                            <span class="date">2024 - Prezent</span>
+                        </div>
+                        <p class="institution">CEEF - Chișinău</p>
+                        <p class="description">Specialitate: Dezvoltarea Aplicațiilor Web. Studiu intensiv al HTML5, CSS3, design responsiv și principii de UX/UI.</p>
+                    </div>
+
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <h3>Curs BAC</h3>
+                            <span class="date">2026 - Prezent</span>
+                        </div>
+                        <p class="institution">IMPACT ACADEMY - Chișinău</p>
+                        <p class="description">Pregătire pentru Bacalaureat cu focus pe consolidarea cunoștințelor académice.</p>
+                    </div>
+
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <h3>Absolvirea Liceului</h3>
+                            <span class="date">2016 - 2023</span>
+                        </div>
+                        <p class="institution">Liceul Gaudeamus - Chișinău</p>
+                    </div>
+                </section>
+
+                <!-- Experiență Profesională -->
+                <section class="cv-section">
+                    <h2>Experiență</h2>
+                    
+                    <div class="experience-item">
+                        <div class="item-header">
+                            <h3>Stagiar Web Developer</h3>
+                            <span class="date">2024-acum</span>
+                        </div>
+                        <p class="institution">CEEF</p>
+                        <ul class="description-list">
+                            <li>Dezvoltarea componentelor web cu HTML5 și CSS3</li>
+                            <li>Optimizare și refactorizare a codului CSS</li>
+                            <li>Colaborare cu echipa de design pe proiecte UI/UX</li>
+                            <li>Implementare de design-uri responsive pentru diferite dispozitive</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <!-- Proiecte -->
+                <section class="cv-section">
+                    <h2>Proiecte Notabile</h2>
+                    
+                    <div class="project-item">
+                        <h3>Portfolio Personal</h3>
+                        <p class="description">Site CV și portofoliu creat cu HTML/CSS pur, fără framework-uri. Design dark modern cu focus pe accesibilitate și responsivitate.</p>
+                        <p class="tech-used"><strong>Tehnologii:</strong> HTML5, CSS3</p>
+                    </div>
+
+                    <div class="project-item">
+                        <h3>Probleme Programare</h3>
+                        <p class="description">Rezolvare a problemelor de programare în C++ și Python cu explicații detaliate.</p>
+                        <p class="tech-used"><strong>Tehnologii:</strong> C++, Python</p>
+                    </div>
+
+                    <div class="project-item">
+                        <h3>Practica la Colegiu</h3>
+                        <p class="description">Finalizare cu succes a stagiului obligatoriu cu note foarte bune.</p>
+                        <p class="tech-used"><strong>Focus:</strong> Web Development & Design</p>
+                    </div>
+                </section>
+            </main>
+        </div>
+
+        <!-- Footer Navigation -->
+        <footer class="cv-footer">
+            <a href="portfolio.html" class="footer-link">Vizualizează Portofoliul →</a>
+            <a href="probleme.html" class="footer-link" style="border-color: rgba(232,209,197,0.5); color: var(--text-secondary);">Probleme Programare →</a>
+            <p>&copy; 2026 Ivanov Nichita.</p>
+        </footer>
+    </div>
+</body>
+</html>
