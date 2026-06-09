@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tratarea Excepțiilor în C# - Ghid Complet</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ─── Navigation ─── */
+        .top-nav {
+            background: var(--gray-dark);
+            border-bottom: 2px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .top-nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0;
+            margin: 0 auto;
+            max-width: 1100px;
+            padding: 0 2rem;
+        }
+        .top-nav ul li a {
+            display: block;
+            padding: 1rem 1.4rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            transition: all 0.2s ease;
+            border-bottom: 3px solid transparent;
+        }
+        .top-nav ul li a:hover,
+        .top-nav ul li a.active {
+            color: var(--beige-rose);
+            border-bottom-color: var(--beige-rose);
+        }
+
+        /* ─── Hero Section ─── */
+        .hero-exceptii {
+            background: linear-gradient(135deg, var(--gray-dark) 0%, #3d3f41 100%);
+            padding: 4rem 3rem;
+            border-bottom: 2px solid var(--border-light);
+            position: relative;
+            overflow: hidden;
+        }
+        .hero-exceptii::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(232,209,197,0.08) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .hero-icon {
+            font-size: 3.2rem;
+            margin-bottom: 1.2rem;
+            display: block;
+        }
+        .hero-exceptii h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--beige-rose), var(--cream));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.8rem;
+            line-height: 1.2;
+        }
+        .hero-exceptii .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            font-weight: 500;
+        }
+
+        /* ─── Main Container ─── */
+        .content-wrapper {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 4rem 3rem;
+        }
+
+        /* ─── Section Styling ─── */
+        .concept-section {
+            margin-bottom: 4rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .concept-section h2 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--beige-rose);
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-light);
+        }
+        .concept-section p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* ─── Code Box ─── */
+        .code-block {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--border-light);
+            border-radius: 6px;
+            padding: 1.8rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85rem;
+            color: #7fd3e8;
+            line-height: 1.6;
+        }
+        .code-block code {
+            color: inherit;
+            font-family: inherit;
+        }
+
+        /* ─── Exception Type Cards ─── */
+        .exceptions-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+        .exception-card {
+            background: linear-gradient(135deg, rgba(232,209,197,0.08), rgba(243,232,223,0.04));
+            border: 1px solid var(--border-light);
+            border-radius: 8px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+        .exception-card:hover {
+            background: linear-gradient(135deg, rgba(232,209,197,0.15), rgba(243,232,223,0.08));
+            border-color: var(--beige-rose);
+            transform: translateY(-4px);
+        }
+        .exception-icon {
+            font-size: 2.4rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        .exception-card h3 {
+            color: var(--beige-rose);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.6rem;
+        }
+        .exception-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+        }
+
+        /* ─── Advantage Boxes ─── */
+        .advantages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.8rem;
+            margin: 2rem 0;
+        }
+        .advantage-box {
+            background: rgba(87, 89, 91, 0.35);
+            border-left: 4px solid var(--beige-rose);
+            padding: 2rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        .advantage-box:hover {
+            background: rgba(87, 89, 91, 0.55);
+            transform: translateX(6px);
+        }
+        .advantage-box h3 {
+            color: var(--cream);
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+        .advantage-box p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.7;
+        }
+
+        /* ─── Highlight Box ─── */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(232,209,197,0.12), rgba(232,209,197,0.05));
+            border: 2px solid var(--beige-rose);
+            border-radius: 8px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        .highlight-box h3 {
+            color: var(--beige-rose);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+        .highlight-box p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        /* ─── Structure Flow ─── */
+        .flow-container {
+            background: rgba(87, 89, 91, 0.3);
+            border-radius: 8px;
+            padding: 2.5rem;
+            margin: 2rem 0;
+            text-align: center;
+        }
+        .flow-steps {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        .flow-step {
+            flex: 1;
+            min-width: 120px;
+            background: rgba(232,209,197,0.1);
+            border: 2px solid var(--beige-rose);
+            border-radius: 6px;
+            padding: 1.2rem;
+        }
+        .flow-step-number {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--beige-rose);
+            margin-bottom: 0.6rem;
+        }
+        .flow-step-label {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* ─── Footer ─── */
+        .page-footer {
+            padding: 2.5rem 3rem;
+            border-top: 1px solid var(--border-color);
+            background: rgba(87, 89, 91, 0.2);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            align-items: center;
+        }
+        .footer-nav {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .footer-link {
+            color: var(--beige-rose);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            padding: 0.7rem 1.4rem;
+            border: 2px solid var(--beige-rose);
+            border-radius: 4px;
+        }
+        .footer-link:hover {
+            background: var(--beige-rose);
+            color: var(--brown-dark);
+        }
+        .footer-text {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 900px) {
+            .content-wrapper {
+                padding: 2.5rem 2rem;
+            }
+            .hero-exceptii {
+                padding: 2.5rem 2rem;
+            }
+            .hero-exceptii h1 {
+                font-size: 2rem;
+            }
+            .exceptions-grid,
+            .advantages-grid {
+                grid-template-columns: 1fr;
+            }
+            .flow-steps {
+                flex-direction: column;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .content-wrapper {
+                padding: 1.5rem;
+            }
+            .hero-exceptii {
+                padding: 1.5rem;
+            }
+            .hero-exceptii h1 {
+                font-size: 1.6rem;
+            }
+            .hero-icon {
+                font-size: 2.4rem;
+            }
+            .concept-section h2 {
+                font-size: 1.3rem;
+            }
+            .code-block {
+                font-size: 0.75rem;
+                padding: 1.2rem;
+            }
+            .flow-container {
+                padding: 1.5rem;
+            }
+            .footer-nav {
+                flex-direction: column;
+            }
+            .footer-link {
+                width: 100%;
+            }
+            .top-nav ul { padding: 0; }
+            .top-nav ul li a { padding: 0.9rem 0.9rem; font-size: 0.8rem; }
+        }
+    </style>
+<base target="_blank">
+</head>
+<body>
+    <div class="cv-container">
+        <!-- Navigation -->
+        <nav class="top-nav">
+            <ul>
+                <li><a href="index.html">CV-ul meu</a></li>
+                <li><a href="portfolio.html">Portofoliu</a></li>
+                <li><a href="probleme.html">Probleme Programare</a></li>
+                <li><a href="exceptii.html" class="active">Excepții C#</a></li>
+                <li><a href="declaratie.html">Declarație</a></li>
+            </ul>
+        </nav>
+
+        <!-- Hero Section -->
+        <header class="hero-exceptii">
+            <div class="hero-content">
+                <span class="hero-icon"></span>
+                <h1>Tratarea Excepțiilor<br>în C#</h1>
+                <p class="subtitle">Ghid complet pentru gestionarea erorilor și crearea de aplicații robuste</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+
+            <!-- 1. Ce sunt excepțiile? -->
+            <section class="concept-section">
+                <h2>1. Ce Sunt Excepțiile?</h2>
+                <p>O excepție este o <strong>eroare care apare în timpul execuției programului</strong> și întrerupe fluxul normal al acestuia. În loc să permiteți programului să se blocheze brutal, C# oferă mecanisme de tratare gracioasă a acestor erori.</p>
+
+                <div class="highlight-box">
+                    <h3>De ce sunt importante?</h3>
+                    <p>✓ Asigură stabilitatea aplicației<br>
+                    ✓ Permite gestionarea controlată a erorilor<br>
+                    ✓ Îmbunătățește experiența utilizatorului<br>
+                    ✓ Facilitează debugging-ul codului</p>
+                </div>
+            </section>
+
+            <!-- 2. Tipuri de Excepții Comune -->
+            <section class="concept-section">
+                <h2>2. Tipuri de Excepții în C#</h2>
+                <p>C# oferă multe clase de excepții predefinite pentru diferite situații:</p>
+
+                <div class="exceptions-grid">
+                    <div class="exception-card">
+                        <span class="exception-icon"></span>
+                        <h3>DivideByZeroException</h3>
+                        <p>Se ridică când încercați să împărțiți un număr la zero.</p>
+                    </div>
+                    <div class="exception-card">
+                        <span class="exception-icon"></span>
+                        <h3>FormatException</h3>
+                        <p>Apare la conversii de tip greșite, de exemplu text în loc de număr.</p>
+                    </div>
+                    <div class="exception-card">
+                        <span class="exception-icon"></span>
+                        <h3>NullReferenceException</h3>
+                        <p>Accesarea unui obiect care este null (nul).</p>
+                    </div>
+                    <div class="exception-card">
+                        <span class="exception-icon"></span>
+                        <h3>IndexOutOfRangeException</h3>
+                        <p>Index invalid atunci când accesați un element dintr-un array.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Structura Try-Catch-Finally -->
+            <section class="concept-section">
+                <h2>3. Structura Try-Catch-Finally</h2>
+                <p>Aceasta este baza tratării excepțiilor în C#. Trei blocuri fundamentale:</p>
+
+                <div class="flow-container">
+                    <div class="flow-steps">
+                        <div class="flow-step">
+                            <span class="flow-step-number">1</span>
+                            <span class="flow-step-label">try</span>
+                        </div>
+                        <div class="flow-step">
+                            <span class="flow-step-number">2</span>
+                            <span class="flow-step-label">catch</span>
+                        </div>
+                        <div class="flow-step">
+                            <span class="flow-step-number">3</span>
+                            <span class="flow-step-label">finally</span>
+                        </div>
+                    </div>
+                    <div style="color: var(--text-secondary); font-size: 0.9rem; line-height: 1.7;">
+                        <p><strong>try:</strong> Conține codul care poate genera eroare</p>
+                        <p><strong>catch:</strong> Tratează excepția dacă este ridicată</p>
+                        <p><strong>finally:</strong> Se execută întotdeauna, indiferent de rezultat</p>
+                    </div>
+                </div>
+
+                <div class="code-block">
+<code>try
+{
+    // Cod care poate genera eroare
+    int a = 10;
+    int b = 0;
+    int c = a / b;  // DivideByZeroException!
+}
+catch (DivideByZeroException)
+{
+    Console.WriteLine("Eroare: Împărțire la 0!");
+}
+finally
+{
+    Console.WriteLine("Operație finalizată");
+}</code>
+                </div>
+            </section>
+
+            <!-- 4. Exemplu Practic: Validare Input -->
+            <section class="concept-section">
+                <h2>4. Exemplu Practic: Validare Input Utilizator</h2>
+                <p>Unul dintre cazurile cele mai frecvente este prevenirea blocării programului când utilizatorul introduce date invalide:</p>
+
+                <div class="code-block">
+<code>try
+{
+    Console.Write("Introdu un număr: ");
+    int x = int.Parse(Console.ReadLine());
+    Console.WriteLine("Numărul: " + x);
+}
+catch (FormatException)
+{
+    Console.WriteLine("❌ Ai introdus text, nu număr!");
+}
+catch (Exception ex)
+{
+    Console.WriteLine("❌ Eroare: " + ex.Message);
+}</code>
+                </div>
+
+                <div class="highlight-box">
+                    <h3>Observație Importantă</h3>
+                    <p>Puteți avea <strong>mai mulți catch</strong>! Fiecare tratează o eroare diferită. Cel mai specific se execută primul. Ordinea contează!</p>
+                </div>
+            </section>
+
+            <!-- 5. Excepții Personalizate -->
+            <section class="concept-section">
+                <h2>5. Excepții Personalizate (Custom Exceptions)</h2>
+                <p>Puteți crea propriile excepții pentru reguli de business specifice. De exemplu, un utilizator nu poate avea vârstă negativă:</p>
+
+                <div class="code-block">
+<code>public class InvalidAgeException : Exception
+{
+    public InvalidAgeException(string msg)
+        : base(msg) { }
+}
+
+static void SetAge(int age)
+{
+    if (age < 0)
+    {
+        throw new InvalidAgeException(
+            "Vârsta nu poate fi negativă!");
+    }
+    Console.WriteLine("Vârsta: " + age);
+}</code>
+                </div>
+
+                <p style="margin-top: 1.5rem; color: var(--text-secondary);">
+                    <strong>Avantaje:</strong> Cod mai curat fără mii de if-uri, separare logică clară a validării, mesaje specifice pentru domeniu de aplicație.
+                </p>
+            </section>
+
+            <!-- 6. Avantajele Tratării Excepțiilor -->
+            <section class="concept-section">
+                <h2>6. Avantajele Tratării Excepțiilor</h2>
+
+                <div class="advantages-grid">
+                    <div class="advantage-box">
+                        <h3>Stabilitate</h3>
+                        <p>Aplicația nu se blochează complet. Programul poate continua să funcționeze și să se recupereze din erori.</p>
+                    </div>
+                    <div class="advantage-box">
+                        <h3>UX Bună</h3>
+                        <p>Utilizatorii primesc mesaje clare și înțelese despre ce s-a întâmplat, nu erori criptice.</p>
+                    </div>
+                    <div class="advantage-box">
+                        <h3>Debugging Ușor</h3>
+                        <p>Proprietatea ex.Message ajută la identificarea rapidă și rezolvarea problemelor.</p>
+                    </div>
+                    <div class="advantage-box">
+                        <h3>Control Fluxu</h3>
+                        <p>Decideți exact cum programul va continua după o eroare.</p>
+                    </div>
+                    <div class="advantage-box">
+                        <h3>Protecție Resurse</h3>
+                        <p>Blocul finally asigură eliberarea fișierelor, conexiunilor de bază de date și memoriei.</p>
+                    </div>
+                    <div class="advantage-box">
+                        <h3>Cod Curat</h3>
+                        <p>Separare clară între logica normală și tratarea erorilor.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Conexiune cu OOP -->
+            <section class="concept-section">
+                <h2>7. Legatura cu Programarea Orientată pe Obiecte</h2>
+                <p>Excepțiile nu sunt doar mecanisme de eroare—sunt <strong>obiecte în C#</strong> și demonstrează puterea OOP:</p>
+
+                <div class="highlight-box">
+                    <h3>Principiile OOP în Excepții</h3>
+                    <p><strong>Încapsulare:</strong> Protejați datele și validați prin excepții.<br>
+                    <strong>Moștenire:</strong> Excepțiile personalizate moștenesc din clasa Exception.<br>
+                    <strong>Polimorfism:</strong> Un catch cu base Exception poate prinde toate derivatele.</p>
+                </div>
+
+                <p style="margin-top: 1.5rem; color: var(--text-secondary);">
+                    Aceasta demonstrează că <strong>un programator serios creează cod robust prin tratarea excepțiilor</strong>. Codul fără tratare = codul amator. Codul cu tratare = profesional și stabil.
+                </p>
+            </section>
+
+            <!-- Conclusion -->
+            <section class="concept-section" style="margin-top: 5rem; padding-top: 3rem; border-top: 2px solid var(--border-light);">
+                <h2>Concluzie</h2>
+                <p>Tratarea excepțiilor în C# nu este opțională—este <strong>marca unui programator serios</strong>. Prin înțelegerea și implementarea corectă a try-catch-finally, a excepțiilor personalizate și a best practices, creați aplicații care sunt stabile, ușor de întreținut și care oferă o experiență excelentă utilizatorului.</p>
+
+                <p style="margin-top: 1rem; color: var(--beige-rose); font-weight: 600;">
+
+                </p>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="page-footer">
+            <nav class="footer-nav">
+                <a href="index.html" class="footer-link">← CV Principal</a>
+                <a href="portfolio.html" class="footer-link">Portofoliu</a>
+                <a href="probleme.html" class="footer-link">Probleme Programare</a>
+                <a href="declaratie.html" class="footer-link">Declarație →</a>
+            </nav>
+            <p class="footer-text">&copy; 2026 Ivanov Nichita. Material educațional bazat pe prezentarea orală.</p>
+        </footer>
+    </div>
+</body>
+</html>
